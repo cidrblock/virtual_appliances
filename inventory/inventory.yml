@@ -1,0 +1,31 @@
+all:
+  children:
+    centos:
+      hosts:
+        one:
+          virt_net: "192.168.122.0/24"
+        two:
+          virt_net: "192.168.123.0/24"
+    veos:
+      children:
+        ones_vms:
+          hosts:
+            veos111:
+            veos112:
+            veos113:
+            veos114:
+          vars:
+            host: one
+        twos_vms:
+          hosts:
+            veos211:
+            veos212:
+            veos213:
+            veos214:
+          vars:
+            host: two
+      vars:
+        id: "{{ inventory_hostname[-2:] }}"
+        ip_address: "{{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(id|int) }}"
+        vnc_port: '{{ 5900 + id|int }}'
+

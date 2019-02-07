@@ -1,0 +1,12 @@
+- hosts: centos
+  roles:
+  - eos-base
+
+- hosts: veos
+  gather_facts: no
+  roles:
+  - eos-vm
+
+- hosts: centos
+  roles:
+  - dhcpd

@@ -1,0 +1,21 @@
+
+- name: Install the dhcpd
+  yum:
+    name: dhcp
+    state: present
+  become: true
+
+- name: Copy the dhcpd.conf
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+  register: dhcpd_conf
+  become: true
+
+- name: Restart the dhcp serivce
+  service:
+    name: dhcpd
+    state: restarted
+  become: true
+  when: dhcpd_conf['changed']
+

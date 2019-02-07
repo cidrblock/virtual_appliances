@@ -1,0 +1,9 @@
+hostname {{ inventory_hostname }}
+logging console informational
+
+username bthornto secret 0 snapple1
+!
+interface Management1
+   ip address {{ ip_address }}/{{ hostvars[host]['virt_net']|ipaddr('prefix') }}
+
+ip route 0.0.0.0/0 {{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(1) }}

@@ -1,0 +1,13 @@
+vm_directory: /mnt/space/vms/
+bootp_server: one
+images:
+  eos:
+    vmdk:
+      name: vEOS-lab-4.21.1.1F.vmdk
+      path: /mnt/space/isos
+      host: one
+    iso:
+      name: Aboot-veos-8.0.0.iso
+      path: /mnt/space/isos
+      host: one
+

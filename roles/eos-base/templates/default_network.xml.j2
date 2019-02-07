@@ -1,0 +1,8 @@
+<network>
+<name>default</name>
+<bridge name="virbr0"/>
+<domain name="example.com" localOnly="no"/>
+<forward mode="route"/>
+<ip address="{{ virt_net|ipaddr('network')|ipmath(1) }}" netmask="{{ virt_net|ipaddr('netmask') }}">
+</ip>
+</network>
