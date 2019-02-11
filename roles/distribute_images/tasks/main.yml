@@ -1,0 +1,18 @@
+- name: Copy eos images
+  synchronize: 
+    src: "{{ item['value']['path'] }}/{{ item['value']['name'] }}"
+    dest: "{{ vm_directory }}"
+  delegate_to: "{{ item['value']['host'] }}"
+  with_dict: "{{ images['eos'] }}"
+  loop_control:
+    label: "{{ item['value']['name'] }}"
+
+- name: Copy nxos images
+  synchronize: 
+    src: "{{ item['value']['path'] }}/{{ item['value']['name'] }}"
+    dest: "{{ vm_directory }}"
+  delegate_to: "{{ item['value']['host'] }}"
+  with_dict: "{{ images['nxos'] }}"
+  loop_control:
+    label: "{{ item['value']['name'] }}"
+

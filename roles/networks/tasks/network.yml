@@ -1,0 +1,43 @@
+- name: "Get the xml for the {{ item }} network"
+  virt_net:
+    command: get_xml
+    name: "{{ item }}"
+  become: true
+  register: xml
+  when: "item in nets['list_nets']"
+
+- name: "Output the xml for the {{ item }} network"
+  debug:
+    var: xml
+  when: "item in nets['list_nets'] and ansible_verbosity >= 2"
+
+- name: "Destroy the {{ item }} network"
+  virt_net:
+    command: destroy
+    name: "{{ item }}"
+  become: true
+  when: "item in nets['list_nets']"
+  changed_when: True
+
+- name: "Undefine the {{ item }} network"
+  virt_net:
+    command: undefine
+    name: "{{ item }}"
+  become: true
+  when: "item in nets['list_nets']"
+  changed_when: True
+
+- name: "Define the {{ item }} network"
+  virt_net:
+    command: define
+    name: "{{ item }}"
+    xml: "{{ lookup('template', '{{ item }}_network.xml.j2') }}"
+  become: true
+  changed_when: True
+
+- name: "Start the {{ item }} network"
+  virt_net:
+    command: start
+    name: "{{ item }}"
+  become: true
+  changed_when: True

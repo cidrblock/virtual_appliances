@@ -1,12 +1,23 @@
 - hosts: centos
   roles:
-  - eos-base
+  - centos-base
+  - distribute_images
+  - networks
 
-- hosts: veos
+- hosts: virtual_appliances
   gather_facts: no
   roles:
-  - eos-vm
+  - remove_virtual_appliances
+  - build_virtual_appliances
 
 - hosts: centos
   roles:
   - dhcpd
+
+- hosts: virtual_appliances
+  gather_facts: no
+  roles:
+  - first_contact
+
+
+

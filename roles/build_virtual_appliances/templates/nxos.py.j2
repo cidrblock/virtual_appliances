@@ -1,0 +1,13 @@
+#!/bin/env python
+
+
+from cli import cli
+ 
+tmp_config_path = "volatile:poap.cfg"
+source_cfg = "tftp://{{ lookup('dig', tftp_server) }}/{{ inventory_hostname }}.cfg"
+
+
+cli("copy %s %s vrf management" % (source_cfg, tmp_config_path))
+cli("copy %s running-config" % tmp_config_path)
+cli("copy running-config startup-config")
+cli("copy %s scheduled-config" % tmp_config_path)

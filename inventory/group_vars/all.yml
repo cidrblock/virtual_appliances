@@ -1,5 +1,11 @@
+initial_virtual_appliance_users:
+- name: admin
+  password: password
+- name: bthornto
+  password: password
+
 vm_directory: /mnt/space/vms/
-bootp_server: one
+tftp_server: one
 images:
   eos:
     vmdk:
@@ -8,6 +14,15 @@ images:
       host: one
     iso:
       name: Aboot-veos-8.0.0.iso
+      path: /mnt/space/isos
+      host: one
+  nxos:
+    qcow2:
+      name: nxosv.9.2.2.qcow2
+      path: /mnt/space/isos
+      host: one
+    bios:
+      name: OVMF-pure-efi.fd
       path: /mnt/space/isos
       host: one
 

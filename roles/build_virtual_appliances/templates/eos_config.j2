@@ -1,0 +1,12 @@
+hostname {{ inventory_hostname }}
+logging console informational
+lldp run
+
+{% for user in initial_virtual_appliance_users %}
+username {{ user['name'] }} secret 0 {{ user['password'] }}
+{% endfor %}
+
+interface Management1
+   ip address {{ ansible_ssh_host }}/{{ hostvars[host]['virt_net']|ipaddr('prefix') }}
+
+ip route 0.0.0.0/0 {{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(1) }}

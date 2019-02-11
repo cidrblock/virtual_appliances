@@ -1,0 +1,44 @@
+- name: Include the os specific build steps
+  include: "{{ ansible_network_os }}.yml"
+
+- name: Define the virtual appliance
+  virt:
+    name: "{{ inventory_hostname }}"
+    command: define
+    xml: "{{ lookup('template', ansible_network_os + '.xml.j2') }}"
+  become: true
+  delegate_to: "{{ host }}"
+
+- name: Start the virtual appliance
+  virt:
+    name: "{{ inventory_hostname }}"
+    command: start
+  become: true
+  delegate_to: "{{ host }}"
+
+- name: Get the xml for the virtual appliance
+  virt:
+    name: "{{ inventory_hostname }}"
+    command: get_xml
+  become: true
+  register: get_xml
+  delegate_to: "{{ host }}"
+
+- name: Get the mac from the xml
+  xml:
+    xmlstring: "{{ get_xml['get_xml'] }}"
+    xpath: /domain/devices/interface/mac
+    content: attribute
+    attribute: address
+  register: mac
+  delegate_to: "{{ host }}"
+
+- name: Set this virtual_appliance as a dict
+  set_fact:
+    dhcp_spec:
+      mac: "{{ mac['matches'][0]['mac']['address'] }}"
+      ip: "{{ ansible_ssh_host }}"
+      name: "{{ inventory_hostname }}"
+  delegate_to: "{{ host }}"
+
+

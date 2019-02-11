@@ -1,0 +1,18 @@
+- name: Copy qcow2 file for each nxos virtual appliance
+  copy:
+    src: "{{ vm_directory }}/{{ images['nxos']['qcow2']['name'] }}"
+    dest: "{{ qcow }}"
+    remote_src: yes
+  delegate_to: "{{ host }}"
+
+- name: Template out the POAP python script for each nxos virtual appliance
+  template:
+    src: nxos.py.j2
+    dest: "{{ vm_directory }}{{ inventory_hostname }}.py"
+  delegate_to: "{{ tftp_server }}"
+
+- name: Template out the initial config file for each nxos virtual appliance
+  template:
+    src: nxos_config.j2
+    dest: "{{ vm_directory }}{{ inventory_hostname }}.cfg"
+  delegate_to: "{{ tftp_server }}"

@@ -1,0 +1,11 @@
+
+- name: Install the lxml pip package
+  pip:
+    name:
+    - lxml
+  become: true
+
+- name: Enable lldp
+  shell: "/bin/sh -c 'echo 16384 > /sys/class/net/virbr0/bridge/group_fwd_mask'"
+  become: true
+

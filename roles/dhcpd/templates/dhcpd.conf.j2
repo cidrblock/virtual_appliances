@@ -46,11 +46,20 @@ subnet {{ virt_net|ipaddr('network') }} netmask {{ virt_net|ipaddr('netmask') }}
 {% if 'host' in vars %}
 {% if vars['host'] == inventory_hostname %}
 {% if 'dhcp_spec' in vars %}
+{% if vars['ansible_network_os'] == 'eos' %}
   host {{ vars['dhcp_spec']['name'] }} {
     hardware ethernet {{ vars['dhcp_spec']['mac'] }};
     fixed-address {{ vars['dhcp_spec']['ip'] }};
-    option bootfile-name "http://{{ lookup('dig', bootp_server) }}:8080/{{ vars['dhcp_spec']['name'] }}.cfg";
+    option bootfile-name "tftp://{{ lookup('dig', tftp_server) }}/{{ vars['dhcp_spec']['name'] }}.cfg";
   }
+{% elif vars['ansible_network_os'] == 'nxos' %}
+  host {{ vars['dhcp_spec']['name'] }} {
+    hardware ethernet {{ vars['dhcp_spec']['mac'] }};
+    fixed-address {{ vars['dhcp_spec']['ip'] }};
+    option tftp-server-name "{{ lookup('dig', tftp_server) }}";
+    option bootfile-name "{{ vars['dhcp_spec']['name'] }}.py";
+  }
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}

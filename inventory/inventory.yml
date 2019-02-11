@@ -6,26 +6,59 @@ all:
           virt_net: "192.168.122.0/24"
         two:
           virt_net: "192.168.123.0/24"
-    veos:
+      vars:
+       ansible_sudo_pass: snapple1
+    virtual_appliances:
       children:
-        ones_vms:
-          hosts:
-            veos111:
-            veos112:
-            veos113:
-            veos114:
+        veos:
+          children:
+            ones_veos:
+              hosts:
+                veos111:
+                veos112:
+                veos113:
+                veos114:
+              vars:
+                host: one
+            twos_veos:
+              hosts:
+                veos211:
+                veos212:
+                veos213:
+                veos214:
+              vars:
+                host: two
           vars:
-            host: one
-        twos_vms:
-          hosts:
-            veos211:
-            veos212:
-            veos213:
-            veos214:
+            ansible_network_os: eos
+        nxos:
+          children:
+            ones_nxos:
+              hosts:
+                nxos121:
+                nxos122:
+                nxos123:
+                nxos124:
+              vars:
+                host: one
+            twos_nxos:
+              hosts:
+                nxos221:
+                nxos222:
+                nxos223:
+                nxos224:
+              vars:
+                host: two
           vars:
-            host: two
+            ansible_network_os: nxos
       vars:
         id: "{{ inventory_hostname[-2:] }}"
-        ip_address: "{{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(id|int) }}"
         vnc_port: '{{ 5900 + id|int }}'
+        telnet_port: '{{ 2000 + id|int }}'
+        ansible_ssh_host: "{{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(id|int) }}"
+        ansible_user: "{{ initial_virtual_appliance_users[0]['name'] }}"
+        ansible_connection: network_cli
+        ansible_password: "{{ initial_virtual_appliance_users[0]['password'] }}"
+        ansible_become: True
+        ansible_become_method: enable
+        ansible_become_pass: "{{ initial_virtual_appliance_users[0]['password'] }}"
 

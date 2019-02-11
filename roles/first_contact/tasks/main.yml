@@ -1,0 +1,30 @@
+- name: Wait for port 22 to become open after build
+  wait_for:
+    port: 22
+    host: "{{ ansible_ssh_host }}"
+    delay: 300
+    timeout: 1200
+  delegate_to: "{{ host }}"
+
+- name: Copy run start
+  cli_command:
+    command: copy run start
+
+- name: Reload the box
+  cli_command:
+    command: "{{ reload_command[ansible_network_os] }}"
+
+- name: Wait for port 22 to become open after reboot
+  wait_for:
+    port: 22
+    host: "{{ ansible_ssh_host }}"
+    delay: 300
+    timeout: 1200
+  delegate_to: "{{ host }}"
+
+- cli_command:
+    command: show run
+  register: running
+
+- debug:
+    var: running
