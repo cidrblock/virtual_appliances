@@ -30,3 +30,12 @@
   virt_net:
     autostart: yes
     name: "{{ item }}"
+
+- name: "Get the {{ item }} network config"
+  shell: "/usr/sbin/ip -d link sh {{ item|regex_replace('-', '_') }}"
+  register: net_info
+
+- name: "Enable lldp on the{{ item }} network"
+  shell: "/usr/sbin/ip link set {{ item|regex_replace('-', '_') }} type bridge group_fwd_mask 0x4000"
+  when: "'group_fwd_mask 0x4000' not in net_info['stdout']"
+  become: True
