@@ -2,7 +2,6 @@
   virt:
     command: list_vms
   register: list_vms
-  become: true
   delegate_to: "{{ host }}"
 
 - name: Get the info for each
@@ -11,7 +10,6 @@
     command: info
   when: "inventory_hostname in list_vms['list_vms']"
   register: veos
-  become: true
   delegate_to: "{{ host }}"
 
 - name: Destroy the virtual appliance
@@ -19,7 +17,6 @@
     name: "{{ inventory_hostname }}"
     command: destroy
   when: "inventory_hostname in list_vms['list_vms'] and veos is defined and veos[inventory_hostname]['state'] == 'running'"
-  become: true
   delegate_to: "{{ host }}"
   changed_when: True
 
@@ -28,7 +25,6 @@
     name: "{{ inventory_hostname }}"
     command: undefine
   when: "inventory_hostname in list_vms['list_vms']"
-  become: true
   delegate_to: "{{ host }}"
   changed_when: True
 
@@ -49,4 +45,3 @@
     state: absent
   when: qcow_stat['stat']['exists']
   delegate_to: "{{ host }}"
-

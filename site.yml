@@ -1,6 +1,7 @@
 - hosts: centos
   roles:
-  - centos-base
+  - name: centos-base
+    become: True
   - distribute_images
   - networks
 
@@ -12,12 +13,10 @@
 
 - hosts: centos
   roles:
-  - dhcpd
+  - name: dhcpd
+    become: True
 
 - hosts: virtual_appliances
   gather_facts: no
   roles:
   - first_contact
-
-
-

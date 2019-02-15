@@ -5,7 +5,7 @@
   <vcpu placement='static'>4</vcpu>
   <os>
     <type arch='x86_64' machine='pc-i440fx-rhel7.6.0'>hvm</type>
-    <loader>{{ vm_directory }}{{ images['nxos']['bios']['name'] }}</loader>
+    <loader readonly='yes' secure='no'>/usr/share/edk2.git/ovmf-x64/OVMF-pure-efi.fd</loader>
     <boot dev='cdrom'/>
     <boot dev='hd'/>
   </os>
@@ -24,18 +24,18 @@
       <source file='{{ vm_directory }}{{ inventory_hostname }}.qcow2'/>
       <target dev='sda' bus='sata'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
-    </disk>    
+    </disk>
     <controller type='sata' index='0'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
     </controller>
     <controller type='pci' index='0' model='pci-root'/>
     <interface type='network'>
-      <source network='default'/>
+      <source network='net-mgmt'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
    <interface type='network'>
-      <source network='inside'/>
+      <source network='net-inside'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
     </interface>

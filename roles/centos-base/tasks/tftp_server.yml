@@ -1,0 +1,29 @@
+- name: Install the tftp server and xinetd
+  package:
+    name:
+    - tftp
+    - tftp-server
+    - xinetd
+
+- name: Template out the tftp configuration file
+  template:
+    src: tftp.j2
+    dest: /etc/xinetd.d/tftp
+  register: tftp_conf
+
+- name: Template out the tftp service file
+  template:
+    src: tftp.service.j2
+    dest: /usr/lib/systemd/system/tftp.service
+  register: tftp_service
+
+- name: Start the xinetd service
+  service:
+    name: xinetd
+    state: started
+
+- name: Start the tftp service
+  service:
+    name: xinetd
+    state: restarted
+  when: tftp_conf.changed or tftp_service.changed

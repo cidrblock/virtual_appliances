@@ -1,0 +1,12 @@
+- name: Enable the UEFI bios repository
+  yum_repository:
+    name: qemu-firmware-jenkins
+    description: firmware for qemu, built by jenkins, fresh from git repos
+    baseurl: https://www.kraxel.org/repos/jenkins/
+    enabled: True
+    gpgcheck: False
+
+- name: Install the UEFI bios
+  package:
+    name: edk2.git-ovmf-x64
+    state: present

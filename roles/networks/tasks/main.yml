@@ -1,16 +1,9 @@
-- name: List the existing networks
+- name: Collect information about the current networks
   virt_net:
-    command: list_nets
-  become: true
-  register: nets
-
-- name: Output the existing networks
-  debug:
-    var: nets
-  when: "ansible_verbosity >= 2"
+    command: facts
 
 - name: Build each network
   include: network.yml
   with_items:
-  - default
-  - inside
+  - net-mgmt
+  - net-inside

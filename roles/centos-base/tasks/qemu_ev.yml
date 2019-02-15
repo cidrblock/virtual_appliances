@@ -1,0 +1,9 @@
+- name: Install the qemu-ev package
+  package:
+    name: centos-release-qemu-ev
+    state: present
+
+- name: Install the qemu-kvm-ev package
+  package:
+    name: qemu-kvm-ev
+    state: present

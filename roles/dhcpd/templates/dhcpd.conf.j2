@@ -1,46 +1,18 @@
-# dhcpd.conf
-#
-# Sample configuration file for ISC dhcpd
-#
 
-# option definitions common to all supported networks...
-option domain-name "example.org";
-option domain-name-servers ns1.example.org, ns2.example.org;
 
 default-lease-time 600;
 max-lease-time 7200;
-
-# Use this to enble / disable dynamic dns updates globally.
-#ddns-update-style none;
-
-# If this DHCP server is the official DHCP server for the local
-# network, the authoritative directive should be uncommented.
-#authoritative;
-
-# Use this to send dhcp log messages to a different log file (you also
-# have to hack syslog.conf to complete the redirection).
 log-facility local7;
 
-#class "ARISTA" {
-# match if substring(option vendor-class-identifier, 0, 6) = "Arista";
-# option bootfile-name "http://192.168.86.98:8000/boot";
-# }
+subnet {{ net_mgmt|ipaddr('network') }} netmask {{ net_mgmt|ipaddr('netmask') }} {
 
-subnet {{ virt_net|ipaddr('network') }} netmask {{ virt_net|ipaddr('netmask') }} {
-
- option routers {{ virt_net|ipaddr('network')|ipmath(1) }};
- option subnet-mask {{ virt_net|ipaddr('netmask') }};
- option broadcast-address {{ virt_net|ipaddr('network')|ipmath(255) }};
  default-lease-time 86400;
  max-lease-time 86400;
- option domain-name-servers 192.168.86.1;
- # pool {
- # range 192.168.122.2 192.168.122.20;
- # allow members of "ARISTA";
- # }
- # pool {
- # range 192.168.122.21 192.168.122.30;
- # }
+ option routers {{ net_mgmt|ipaddr('network')|ipmath(1) }};
+ option subnet-mask {{ net_mgmt|ipaddr('netmask') }};
+ option broadcast-address {{ net_mgmt|ipaddr('network')|ipmath(255) }};
+ option domain-name-servers {{ dhcp['dns_server'] }};
+ option domain-name "{{ dhcp['domain_name'] }}";
 
 {% for host, vars in hostvars.items() %}
 {% if 'host' in vars %}

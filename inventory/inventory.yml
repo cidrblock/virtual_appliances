@@ -3,11 +3,15 @@ all:
     centos:
       hosts:
         one:
-          virt_net: "192.168.122.0/24"
+          net_mgmt: "192.168.101.0/24"
         two:
-          virt_net: "192.168.123.0/24"
+          net_mgmt: "192.168.102.0/24"
+        three:
+          net_mgmt: "192.168.103.0/24"
       vars:
        ansible_sudo_pass: snapple1
+       net_mgmt_bridge_name: net_mgmt
+       net_inside_bridge_name: net_inside
     virtual_appliances:
       children:
         veos:
@@ -54,11 +58,10 @@ all:
         id: "{{ inventory_hostname[-2:] }}"
         vnc_port: '{{ 5900 + id|int }}'
         telnet_port: '{{ 2000 + id|int }}'
-        ansible_ssh_host: "{{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(id|int) }}"
+        ansible_ssh_host: "{{ hostvars[host]['net_mgmt']|ipaddr('network')|ipmath(id|int) }}"
         ansible_user: "{{ initial_virtual_appliance_users[0]['name'] }}"
         ansible_connection: network_cli
         ansible_password: "{{ initial_virtual_appliance_users[0]['password'] }}"
         ansible_become: True
         ansible_become_method: enable
         ansible_become_pass: "{{ initial_virtual_appliance_users[0]['password'] }}"
-

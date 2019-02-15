@@ -6,21 +6,19 @@
     name: "{{ inventory_hostname }}"
     command: define
     xml: "{{ lookup('template', ansible_network_os + '.xml.j2') }}"
-  become: true
   delegate_to: "{{ host }}"
 
 - name: Start the virtual appliance
   virt:
     name: "{{ inventory_hostname }}"
-    command: start
-  become: true
+    command: create
+    autostart: True
   delegate_to: "{{ host }}"
 
 - name: Get the xml for the virtual appliance
   virt:
     name: "{{ inventory_hostname }}"
     command: get_xml
-  become: true
   register: get_xml
   delegate_to: "{{ host }}"
 
@@ -40,5 +38,3 @@
       ip: "{{ ansible_ssh_host }}"
       name: "{{ inventory_hostname }}"
   delegate_to: "{{ host }}"
-
-

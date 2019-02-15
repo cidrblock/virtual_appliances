@@ -7,6 +7,6 @@ username {{ user['name'] }} secret 0 {{ user['password'] }}
 {% endfor %}
 
 interface Management1
-   ip address {{ ansible_ssh_host }}/{{ hostvars[host]['virt_net']|ipaddr('prefix') }}
+   ip address {{ ansible_ssh_host }}/{{ hostvars[host]['net_mgmt']|ipaddr('prefix') }}
 
-ip route 0.0.0.0/0 {{ hostvars[host]['virt_net']|ipaddr('network')|ipmath(1) }}
+ip route 0.0.0.0/0 {{ hostvars[host]['net_mgmt']|ipaddr('network')|ipmath(1) }}

@@ -1,0 +1,8 @@
+<network>
+<name>net-mgmt</name>
+<bridge name="{{ net_mgmt_bridge_name }}"/>
+<domain name="example.com" localOnly="no"/>
+<forward mode="route"/>
+<ip address="{{ net_mgmt|ipaddr('network')|ipmath(1) }}" netmask="{{ net_mgmt|ipaddr('netmask') }}">
+</ip>
+</network>

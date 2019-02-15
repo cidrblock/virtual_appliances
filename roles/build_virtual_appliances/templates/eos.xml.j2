@@ -49,12 +49,12 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
     </controller>
     <interface type='network'>
-      <source network='default' portgroup='management'/>
+      <source network='net-mgmt' portgroup='management'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
     <interface type='network'>
-      <source network='inside' portgroup='trunked'/>
+      <source network='net-inside' portgroup='trunked'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
     </interface>

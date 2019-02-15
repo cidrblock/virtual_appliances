@@ -3,9 +3,19 @@
   pip:
     name:
     - lxml
-  become: true
 
-- name: Enable lldp
-  shell: "/bin/sh -c 'echo 16384 > /sys/class/net/virbr0/bridge/group_fwd_mask'"
-  become: true
+- name: Add the user to the libvirt group
+  user:
+    name: "{{ lookup('env','USER') }}"
+    groups: libvirt
+    append: True
 
+- name: Include the step for the UEFI BIOS installation
+  include: uefi_bios.yml
+
+- name: Install qemu-ev
+  include: qemu_ev.yml
+
+- name: Install the tftp server on the tftp host
+  include: tftp_server.yml
+  when: inventory_hostname_short == tftp_server
