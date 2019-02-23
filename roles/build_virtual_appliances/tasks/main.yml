@@ -1,3 +1,16 @@
+- name: Creates directory for the virtual appliance on the host
+  file:
+    path: "{{ vm_directory }}/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: "{{ host }}"
+
+- name: Creates directory for the virtual appliance on the tftp server
+  file:
+    path: "{{ vm_directory }}/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: "{{ tftp_server }}"
+  when: "ansible_network_os in ['eos', 'nxos']"
+
 - name: Include the os specific build steps
   include: "{{ ansible_network_os }}.yml"
 

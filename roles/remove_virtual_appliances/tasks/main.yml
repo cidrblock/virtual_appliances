@@ -28,20 +28,15 @@
   delegate_to: "{{ host }}"
   changed_when: True
 
-- name: Set a fact for the qcow2 file
-  set_fact:
-      qcow: "{{ vm_directory }}/{{ inventory_hostname  + '.qcow2' }}"
-  delegate_to: "{{ host }}"
-
-- name: Check that the qcow2 exists
-  stat:
-    path: "{{ qcow }}"
-  delegate_to: "{{ host }}"
-  register: qcow_stat
-
-- name: Delete the qcow2 file
+- name: Remove directory for the virtual appliance on the host
   file:
-    path: "{{ qcow }}"
+    path: "{{ vm_directory }}/{{ inventory_hostname }}"
     state: absent
-  when: qcow_stat['stat']['exists']
   delegate_to: "{{ host }}"
+
+- name: Remove directory for the virtual appliance on the tftp server
+  file:
+    path: "{{ vm_directory }}/{{ inventory_hostname }}"
+    state: absent
+  delegate_to: "{{ tftp_server }}"
+  when: "ansible_network_os in ['eos', 'nxos']"

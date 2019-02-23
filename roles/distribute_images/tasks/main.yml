@@ -1,7 +1,12 @@
+- name: Make the images directory
+  file: 
+    path: "{{ vm_directory }}/images"
+    state: directory
+
 - name: Copy eos images
   synchronize: 
     src: "{{ item['value']['path'] }}/{{ item['value']['name'] }}"
-    dest: "{{ vm_directory }}"
+    dest: "{{ vm_directory }}/images/"
   delegate_to: "{{ item['value']['host'] }}"
   with_dict: "{{ images['eos'] }}"
   loop_control:
@@ -10,9 +15,18 @@
 - name: Copy nxos images
   synchronize: 
     src: "{{ item['value']['path'] }}/{{ item['value']['name'] }}"
-    dest: "{{ vm_directory }}"
+    dest: "{{ vm_directory }}/images/"
   delegate_to: "{{ item['value']['host'] }}"
   with_dict: "{{ images['nxos'] }}"
+  loop_control:
+    label: "{{ item['value']['name'] }}"
+
+- name: Copy ios images
+  synchronize: 
+    src: "{{ item['value']['path'] }}/{{ item['value']['name'] }}"
+    dest: "{{ vm_directory }}/images/"
+  delegate_to: "{{ item['value']['host'] }}"
+  with_dict: "{{ images['ios'] }}"
   loop_control:
     label: "{{ item['value']['name'] }}"
 

@@ -1,9 +1,16 @@
 - name: Convert the vmdk file for each eos virtual appliance
-  shell: "qemu-img convert -f vmdk -O qcow2 {{ vm_directory }}/{{ images['eos']['vmdk']['name'] }} {{ qcow }}"
+  shell: "qemu-img convert -f vmdk -O qcow2 {{ vm_directory }}/images/{{ images['eos']['vmdk']['name'] }} {{ vm_directory }}/{{ inventory_hostname }}/{{ (images['eos']['vmdk']['name']|splitext)[0] }}.qcow2"
+  delegate_to: "{{ host }}"
+
+- name: Copy the aboot iso for each eos virtual appliance
+  copy: 
+    src: "{{ vm_directory }}/images/{{ images['eos']['iso']['name'] }}"
+    dest: "{{ vm_directory }}/{{ inventory_hostname }}/{{ images['eos']['iso']['name'] }}"
+    remote_src: True
   delegate_to: "{{ host }}"
 
 - name: Template out the initial config file for each eos virtual appliance
   template:
     src: eos_config.j2
-    dest: "{{ vm_directory }}{{ inventory_hostname }}.cfg"
+    dest: "{{ vm_directory }}/{{ inventory_hostname }}/config.cfg"
   delegate_to: "{{ tftp_server }}"

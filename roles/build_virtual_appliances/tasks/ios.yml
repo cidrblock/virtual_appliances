@@ -1,0 +1,35 @@
+
+
+- name: Copy qcow2 file for each ios virtual appliance
+  copy:
+    src: "{{ vm_directory }}/images/{{ images['ios']['qcow2']['name'] }}"
+    dest: "{{ vm_directory }}/{{ inventory_hostname }}/{{ images['ios']['qcow2']['name'] }}"
+    remote_src: yes
+  delegate_to: "{{ host }}"
+
+- name: Template out the initial configuration for each ios virtual appliance
+  template:
+    src: iosxe_config.txt.j2
+    dest: "{{ vm_directory }}/{{ inventory_hostname }}/iosxe_config.txt"
+  delegate_to: "{{ host }}"
+
+- name: Remove the current ios configuration iso
+  file:
+    state: absent
+    path: "{{ vm_directory }}/{{ inventory_hostname }}/csr_config.iso"
+  delegate_to: "{{ host }}"
+
+- name: Build the initial config iso for each ios appliance
+  shell: "mkisofs -l -o csr_config.iso iosxe_config.txt"
+  args:
+    chdir: "{{ vm_directory }}/{{ inventory_hostname }}"
+  delegate_to: "{{ host }}"
+
+
+
+
+# - name: Template out the initial config file for each nxos virtual appliance
+#   template:
+#     src: nxos_config.j2
+#     dest: "{{ vm_directory }}{{ inventory_hostname }}.cfg"
+#   delegate_to: "{{ tftp_server }}"

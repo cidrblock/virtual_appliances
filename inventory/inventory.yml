@@ -54,6 +54,26 @@ all:
                 host: two
           vars:
             ansible_network_os: nxos
+        ios:
+          children:
+            ones_ios:
+              hosts:
+                ios131:
+                ios132:
+                ios133:
+                ios134:
+              vars:
+                host: one
+            twos_ios:
+              hosts:
+                ios231:
+                ios232:
+                ios233:
+                ios234:
+              vars:
+                host: two
+          vars:
+            ansible_network_os: ios
       vars:
         id: "{{ inventory_hostname[-2:] }}"
         vnc_port: '{{ 5900 + id|int }}'

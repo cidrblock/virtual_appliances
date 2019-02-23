@@ -22,14 +22,19 @@ subnet {{ net_mgmt|ipaddr('network') }} netmask {{ net_mgmt|ipaddr('netmask') }}
   host {{ vars['dhcp_spec']['name'] }} {
     hardware ethernet {{ vars['dhcp_spec']['mac'] }};
     fixed-address {{ vars['dhcp_spec']['ip'] }};
-    option bootfile-name "tftp://{{ lookup('dig', tftp_server) }}/{{ vars['dhcp_spec']['name'] }}.cfg";
+    option bootfile-name "tftp://{{ lookup('dig', tftp_server) }}/{{ vars['dhcp_spec']['name'] }}/config.cfg";
   }
 {% elif vars['ansible_network_os'] == 'nxos' %}
   host {{ vars['dhcp_spec']['name'] }} {
     hardware ethernet {{ vars['dhcp_spec']['mac'] }};
     fixed-address {{ vars['dhcp_spec']['ip'] }};
     option tftp-server-name "{{ lookup('dig', tftp_server) }}";
-    option bootfile-name "{{ vars['dhcp_spec']['name'] }}.py";
+    option bootfile-name "{{ vars['dhcp_spec']['name'] }}/poap.py";
+  }
+{% elif vars['ansible_network_os'] == 'ios' %}
+  host {{ vars['dhcp_spec']['name'] }} {
+    hardware ethernet {{ vars['dhcp_spec']['mac'] }};
+    fixed-address {{ vars['dhcp_spec']['ip'] }};
   }
 {% endif %}
 {% endif %}

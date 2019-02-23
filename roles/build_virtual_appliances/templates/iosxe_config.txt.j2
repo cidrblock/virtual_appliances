@@ -1,0 +1,15 @@
+hostname {{ inventory_hostname }}
+license smart enable
+{% for user in initial_virtual_appliance_users %}
+username {{ user['name'] }} privilege 15 password {{ user['password'] }}
+{% endfor %}
+ip domain-name {{ dhcp['domain_name'] }}
+crypto key generate rsa modulus 4096
+no call-home
+interface GigabitEthernet1
+ip address dhcp
+no shut
+exit
+line vty 0 4
+ login local
+exit

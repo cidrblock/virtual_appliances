@@ -23,6 +23,11 @@ images:
       name: nxosv.9.2.2.qcow2
       path: /mnt/space/isos
       host: one
+  ios:
+    qcow2:
+      name: csr1000v-universalk9.03.12.00.S.154-2.S-std.qcow2
+      path: /mnt/space/isos
+      host: one
 
 dhcp:
   domain_name: cidrblock.net

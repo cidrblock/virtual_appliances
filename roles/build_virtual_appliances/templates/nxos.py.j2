@@ -4,7 +4,7 @@
 from cli import cli
  
 tmp_config_path = "volatile:poap.cfg"
-source_cfg = "tftp://{{ lookup('dig', tftp_server) }}/{{ inventory_hostname }}.cfg"
+source_cfg = "tftp://{{ lookup('dig', tftp_server) }}/{{ inventory_hostname }}/config.cfg"
 
 
 cli("copy %s %s vrf management" % (source_cfg, tmp_config_path))
