@@ -1,87 +1,45 @@
 all:
+  hosts:
+    localhost:
+      ansible_sudo_pass: "{{ lookup('env', 'ansible_sudo_pass') }}"
   children:
     centos:
       hosts:
         one:
-          net_mgmt: "192.168.101.0/24"
         two:
-          net_mgmt: "192.168.102.0/24"
         three:
-          net_mgmt: "192.168.103.0/24"
-      vars:
-       ansible_sudo_pass: snapple1
-       net_mgmt_bridge_name: net_mgmt
-       net_inside_bridge_name: net_inside
     virtual_appliances:
       children:
-        veos:
-          children:
-            ones_veos:
-              hosts:
-                veos111:
-                veos112:
-                veos113:
-                veos114:
-              vars:
-                host: one
-            twos_veos:
-              hosts:
-                veos211:
-                veos212:
-                veos213:
-                veos214:
-              vars:
-                host: two
+        ones_virtual_appliances:  # name has to match a host xxx_
+          hosts:
+            eos101:
+            eos102:
+            eos103:
+            eos104:
+            nxos101:
+            nxos102:
+            nxos103:
+            nxos104:
+            ios101:
+            ios102:
+            ios103:
+            ios104:
           vars:
-            ansible_network_os: eos
-        nxos:
-          children:
-            ones_nxos:
-              hosts:
-                nxos121:
-                nxos122:
-                nxos123:
-                nxos124:
-              vars:
-                host: one
-            twos_nxos:
-              hosts:
-                nxos221:
-                nxos222:
-                nxos223:
-                nxos224:
-              vars:
-                host: two
+            host: one
+        twos_virtual_appliances: # name has to match a host xxx_
+          hosts:
+            eos201:
+            eos202:
+            eos203:
+            eos204:
+            nxos201:
+            nxos202:
+            nxos203:
+            nxos204:
+            ios201:
+            ios202:
+            ios203:
+            ios204:
           vars:
-            ansible_network_os: nxos
-        ios:
-          children:
-            ones_ios:
-              hosts:
-                ios131:
-                ios132:
-                ios133:
-                ios134:
-              vars:
-                host: one
-            twos_ios:
-              hosts:
-                ios231:
-                ios232:
-                ios233:
-                ios234:
-              vars:
-                host: two
-          vars:
-            ansible_network_os: ios
-      vars:
-        id: "{{ inventory_hostname[-2:] }}"
-        vnc_port: '{{ 5900 + id|int }}'
-        telnet_port: '{{ 2000 + id|int }}'
-        ansible_ssh_host: "{{ hostvars[host]['net_mgmt']|ipaddr('network')|ipmath(id|int) }}"
-        ansible_user: "{{ initial_virtual_appliance_users[0]['name'] }}"
-        ansible_connection: network_cli
-        ansible_password: "{{ initial_virtual_appliance_users[0]['password'] }}"
-        ansible_become: True
-        ansible_become_method: enable
-        ansible_become_pass: "{{ initial_virtual_appliance_users[0]['password'] }}"
+            host: two
+            

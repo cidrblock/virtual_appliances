@@ -1,9 +1,4 @@
 
-initial_virtual_appliance_users:
-- name: admin
-  password: password
-- name: bthornto
-  password: password
 
 vm_directory: /mnt/space/vms/
 tftp_server: one

@@ -7,6 +7,10 @@
 
 - hosts: virtual_appliances
   gather_facts: no
+  pre_tasks:
+  - group_by:
+      key: "seq_{{ host }}"
+    delegate_to: localhost
   roles:
   - remove_virtual_appliances
   - build_virtual_appliances
@@ -15,6 +19,12 @@
   roles:
   - name: dhcpd
     become: True
+
+- hosts: virtual_appliances
+  gather_facts: no
+  serial: 1
+  roles:
+  - prep_localhost
 
 - hosts: virtual_appliances
   gather_facts: no
