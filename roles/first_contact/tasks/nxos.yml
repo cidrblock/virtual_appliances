@@ -1,0 +1,4 @@
+
+- name: Reload the nxos appliance
+  cli_command:
+    command: reload in 5

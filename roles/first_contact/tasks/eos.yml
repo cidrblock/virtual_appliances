@@ -1,0 +1,4 @@
+
+- name: Reload the eos virtual appliance
+  cli_command:
+    command: reload now

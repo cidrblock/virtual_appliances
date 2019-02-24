@@ -1,0 +1,5 @@
+- name: Reload the ios virtual appliance
+  cli_command:
+    command: reload
+    prompt: ".*[confirm].*"
+    answer: "yes"

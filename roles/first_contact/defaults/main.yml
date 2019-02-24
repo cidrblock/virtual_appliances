@@ -1,3 +1,4 @@
-reload_command:
-  eos: reload now
-  nxos: reload in 5
+config_write_command:
+  eos: copy run start
+  nxos: copy run start
+  ios: write memory
