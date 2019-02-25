@@ -1,0 +1,18 @@
+- name: Reset the appliance
+  shell: "virsh reset {{ inventory_hostname }}"
+  delegate_to: "{{ host }}"
+  become: True
+
+- name: "Ping until alive {{ inventory_hostname }}"
+  shell: "ping -c 1 -W 1 {{ ansible_ssh_host }}"
+  register: ping
+  until: ping.rc == 0
+  retries: 20
+  delay: 20
+  delegate_to: localhost
+
+- name: Wait for port 22 to become open
+  wait_for:
+    port: 22
+    host: "{{ ansible_ssh_host }}"
+  delegate_to: localhost

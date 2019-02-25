@@ -1,20 +1,31 @@
-- name: "Ping until alive {{ inventory_hostname }}"
+- name: "Ping until alive after initial build: {{ inventory_hostname }}"
   shell: "ping -c 1 -W 1 {{ ansible_ssh_host }}"
-  register: ping
-  until: ping.rc == 0
+  register: pre_ping
+  until: pre_ping.rc == 0
   retries: 20
   delay: 20
   delegate_to: localhost
 
-- name: Pause for a minute for tftp load and reboot
-  pause:
-    minutes: 1
+- name: Reset the virtual appliance if ping after initial boot failed
+  include: reset_and_check.yml
+  when: pre_ping.failed
 
-- name: Wait for port 22 to become open
+- name: Pause for 3 minutes for tftp load and reboot
+  pause:
+    minutes: 3
+  delegate_to: localhost
+
+- name: Wait for port 22 to become open after initial build
   wait_for:
     port: 22
     host: "{{ ansible_ssh_host }}"
   delegate_to: localhost
+  register: initial_port_22
+  ignore_errors: True
+
+- name: Reset the virtual appliance if port 22 has failed after intial build
+  include: reset_and_check.yml
+  when: initial_port_22.failed
 
 - name: Save the configuration
   cli_command:
@@ -23,28 +34,39 @@
 - name: Reload the virtual appliance
   include: "{{ ansible_network_os }}.yml"
 
-- name: "Ping until down {{ inventory_hostname }}"
+- name: "Ping until down after reload: {{ inventory_hostname }}"
   shell: "ping -c 1 -W 1 {{ ansible_ssh_host }}"
-  register: ping
   until: ping.rc == 1
   retries: 20
   delay: 5
   delegate_to: localhost
   ignore_errors: True
-
-- name: "Ping until alive {{ inventory_hostname }}"
-  shell: "ping -c 1 -W 1 {{ ansible_ssh_host }}"
   register: ping
-  until: ping.rc == 0
+
+- name: "Ping until alive after reload: {{ inventory_hostname }}"
+  shell: "ping -c 1 -W 1 {{ ansible_ssh_host }}"
+  until: post_ping.rc == 0
   retries: 20
   delay: 20
+  ignore_errors: True
   delegate_to: localhost
+  register: post_ping
 
-- name: Wait for port 22 to become open
+- name: Reset the virtual appliance if port 22 has failed after reload
+  include: reset_and_check.yml
+  when: post_ping.failed
+
+- name: Wait for port 22 to become open after reload
   wait_for:
     port: 22
     host: "{{ ansible_ssh_host }}"
   delegate_to: localhost
+  register: post_port_22
+  ignore_errors: True
+
+- name: Reset the virtual appliance if port 22 has failed after reload
+  include: reset_and_check.yml
+  when: post_port_22.failed
 
 - name: Collect the device facts
   include: "facts/{{ ansible_network_os }}.yml"
