@@ -1,0 +1,9 @@
+- name: configure the remote device
+  vyos_config:
+    lines:
+      - "set system host-name {{ inventory_hostname }}"
+    save: True
+
+- name: Reload the vyos virtual appliance
+  cli_command:
+    command: reboot now

@@ -1,4 +1,11 @@
 config_write_command:
-  eos: copy run start
-  nxos: copy run start
-  ios: write memory
+  eos:
+  - copy run start
+  nxos:
+  - copy run start
+  ios:
+  - write memory
+  vyos:
+  - configure
+  - save
+  - exit

@@ -1,0 +1,94 @@
+config dnsmasq
+	option domainneeded '1'
+	option boguspriv '1'
+	option localise_queries '1'
+	option rebind_protection '0'
+	option expandhosts '1'
+	option authoritative '1'
+	option readethers '1'
+	option leasefile '/tmp/dhcp.leases'
+	option resolvfile '/tmp/resolv.conf.auto'
+	option localservice '1'
+	list addnhosts '/tmp/hosts/odhcpd'
+	option cachesize '2048'
+	option domain 'cidrblock.net'
+	option local '/cidrblock.net/'
+	option broadcast '0'
+
+config dhcp 'lan'
+	option interface 'lan'
+	option start '50'
+	option limit '150'
+	option dhcpv6 'server'
+	option ra 'server'
+	option ignore '0'
+	option leasetime '15m'
+
+config dhcp 'wan'
+	option interface 'wan'
+	option ignore '1'
+
+config dhcp 'wan2'
+	option interface 'wan2'
+	option ignore '1'
+
+config dhcp 'wan3'
+	option interface 'wan3'
+	option ignore '1'
+
+config dhcp 'uwan'
+	option interface 'uwan'
+	option ignore '1'
+
+config dhcp 'module'
+	option interface 'module'
+	option ignore '1'
+
+config dhcp 'ether0'
+	option interface 'ether0'
+	option ignore '1'
+
+config odhcpd 'odhcpd'
+	option maindhcp '0'
+	option leasefile '/tmp/hosts/odhcpd'
+	option leasetrigger '/usr/sbin/odhcpd-update'
+
+config host
+	option name 'one'
+	option mac '90:B1:1C:48:50:8F'
+	option ip '192.168.86.232'
+
+config domain
+	option ip '192.168.86.232'
+	option name 'grafana'
+
+config domain
+	option ip '192.168.86.1'
+	option name 'dg'
+
+config domain
+	option name 'git'
+	option ip '192.168.86.232'
+
+config domain
+	option name 'registry'
+	option ip '192.168.86.232'
+
+config domain
+	option name 'graylog'
+	option ip '192.168.86.232'
+
+config domain
+	option name 'switch'
+	option ip '192.168.86.2'
+
+config domain
+	option name 'linode'
+	option ip '45.79.74.140'
+
+{% for va in groups['virtual_appliances'] %}
+config domain
+	option name '{{ va }}'
+	option ip '{{ hostvars[hostvars[va]['host']]['net_mgmt']|ipaddr('network')|ipmath(hostvars[va]['id']|int) }}'
+
+{% endfor %}

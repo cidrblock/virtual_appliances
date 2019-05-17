@@ -1,0 +1,6 @@
+- name: Copy qcow2 file for each vyos virtual appliance
+  copy:
+    src: "{{ vm_directory }}/images/{{ images['vyos']['qcow2']['name'] }}"
+    dest: "{{ vm_directory }}/{{ inventory_hostname }}/{{ images['vyos']['qcow2']['name'] }}"
+    remote_src: yes
+  delegate_to: "{{ host }}"

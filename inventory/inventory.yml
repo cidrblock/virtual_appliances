@@ -2,6 +2,10 @@ all:
   hosts:
     localhost:
       ansible_sudo_pass: "{{ lookup('env', 'ansible_sudo_pass') }}"
+    dns_server:
+      ansible_ssh_host: dg.cidrblock.net
+      ansible_user: root
+      ansible_ssh_pass: "{{ lookup('env', 'ansible_sudo_pass') }}"
   children:
     centos:
       hosts:
@@ -24,6 +28,10 @@ all:
             ios102:
             ios103:
             ios104:
+            vyos101:
+            vyos102:
+            vyos103:
+            vyos104:
           vars:
             host: one
         twos_virtual_appliances: # name has to match a host xxx_
@@ -40,6 +48,9 @@ all:
             ios202:
             ios203:
             ios204:
+            vyos201:
+            vyos202:
+            vyos203:
+            vyos204:
           vars:
             host: two
-            

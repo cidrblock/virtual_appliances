@@ -23,6 +23,11 @@ images:
       name: csr1000v-universalk9.03.12.00.S.154-2.S-std.qcow2
       path: /mnt/space/isos
       host: one
+  vyos:
+    qcow2:
+      name: vyos-1.2.0-rolling+201905140337-amd64.qcow2
+      path: /mnt/space/isos
+      host: one
 
 dhcp:
   domain_name: cidrblock.net

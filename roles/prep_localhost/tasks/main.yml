@@ -1,11 +1,3 @@
-- name: Add an entry to the localhost hosts file
-  lineinfile:
-    path: /etc/hosts
-    regexp: "^.*{{ inventory_hostname }}.*$"
-    line: "{{ ansible_ssh_host }}    {{ inventory_hostname }}"
-  delegate_to: localhost
-  become: True
-
 - name: Remove the ssh key for each virtual appliance name
   shell: "ssh-keygen -R {{ inventory_hostname }}"
   delegate_to: localhost

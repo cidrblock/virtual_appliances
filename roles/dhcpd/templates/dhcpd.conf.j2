@@ -36,6 +36,11 @@ subnet {{ net_mgmt|ipaddr('network') }} netmask {{ net_mgmt|ipaddr('netmask') }}
     hardware ethernet {{ vars['dhcp_spec']['mac'] }};
     fixed-address {{ vars['dhcp_spec']['ip'] }};
   }
+{% elif vars['ansible_network_os'] == 'vyos' %}
+  host {{ vars['dhcp_spec']['name'] }} {
+    hardware ethernet {{ vars['dhcp_spec']['mac'] }};
+    fixed-address {{ vars['dhcp_spec']['ip'] }};
+  }
 {% endif %}
 {% endif %}
 {% endif %}

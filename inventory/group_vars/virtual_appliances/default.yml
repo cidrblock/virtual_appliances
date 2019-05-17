@@ -8,10 +8,7 @@ ansible_password: "{{ initial_virtual_appliance_users[0]['password'] }}"
 ansible_become: True
 ansible_become_method: enable
 ansible_become_pass: "{{ initial_virtual_appliance_users[0]['password'] }}"
-
 ansible_network_os: "{{ inventory_hostname[0:-3] }}"
-
-
 
 initial_virtual_appliance_users:
 - name: admin

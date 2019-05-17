@@ -30,3 +30,8 @@
   gather_facts: no
   roles:
   - first_contact
+
+- hosts: dns_server
+  gather_facts: no
+  roles:
+  - dns_masq

@@ -1,0 +1,12 @@
+- name: Template out the dnsmasq config file
+  template:
+    src: dhcp.j2
+    dest: /tmp/dhcp
+  delegate_to: localhost
+
+- name: Push the dnsmasq file to the dns_server
+  shell: "sshpass -p '{{ ansible_ssh_pass }}' scp /tmp/dhcp {{ ansible_user }}@{{ ansible_ssh_host }}:/etc/config/dhcp"
+  delegate_to: localhost
+
+- name: Restart the dns_masq service
+  raw: /etc/init.d/dnsmasq restart
