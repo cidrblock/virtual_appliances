@@ -16,7 +16,6 @@
 
 - name: Define the virtual appliance
   virt:
-    name: "{{ inventory_hostname }}"
     command: define
     xml: "{{ lookup('template', ansible_network_os + '.xml.j2') }}"
   delegate_to: "{{ host }}"
@@ -40,7 +39,6 @@
     xmlstring: "{{ get_xml['get_xml'] }}"
     xpath: /domain/devices/interface/mac
     content: attribute
-    attribute: address
   register: mac
   delegate_to: "{{ host }}"
 

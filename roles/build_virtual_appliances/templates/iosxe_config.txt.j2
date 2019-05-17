@@ -1,5 +1,7 @@
 hostname {{ inventory_hostname }}
 license smart enable
+lldp run
+cdp run
 {% for user in initial_virtual_appliance_users %}
 username {{ user['name'] }} privilege 15 password {{ user['password'] }}
 {% endfor %}

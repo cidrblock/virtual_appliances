@@ -26,7 +26,7 @@
     name: "{{ item }}"
   changed_when: True
 
-- name: Autostart the {{ item }} network"
+- name: "Autostart the {{ item }} network"
   virt_net:
     autostart: yes
     name: "{{ item }}"
@@ -35,7 +35,7 @@
   shell: "/usr/sbin/ip -d link sh {{ item|regex_replace('-', '_') }}"
   register: net_info
 
-- name: "Enable lldp on the{{ item }} network"
+- name: "Enable lldp on the {{ item }} network"
   shell: "/usr/sbin/ip link set {{ item|regex_replace('-', '_') }} type bridge group_fwd_mask 0x4000"
   when: "'group_fwd_mask 0x4000' not in net_info['stdout']"
   become: True

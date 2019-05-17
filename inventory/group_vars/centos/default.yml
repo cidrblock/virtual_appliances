@@ -3,3 +3,4 @@ ansible_become_pass: "{{ lookup('env', 'ansible_become_pass') }}"
 net_mgmt: "192.168.{{ groups['centos']['index'](inventory_hostname) + 101 }}.0/24"
 net_mgmt_bridge_name: net_mgmt
 net_inside_bridge_name: net_inside
+net_three_bridge_name: net_three

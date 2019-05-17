@@ -11,7 +11,6 @@ all:
       hosts:
         one:
         two:
-        three:
     virtual_appliances:
       children:
         ones_virtual_appliances:  # name has to match a host xxx_
