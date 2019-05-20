@@ -11,6 +11,7 @@ all:
       hosts:
         one:
         two:
+        three:
     virtual_appliances:
       children:
         ones_virtual_appliances:  # name has to match a host xxx_
@@ -53,3 +54,23 @@ all:
             vyos204:
           vars:
             host: two
+        threes_virtual_appliances: # name has to match a host xxx_
+          hosts:
+            eos301:
+            eos302:
+            eos303:
+            eos304:
+            nxos301:
+            nxos302:
+            nxos303:
+            nxos304:
+            ios301:
+            ios302:
+            ios303:
+            ios304:
+            vyos301:
+            vyos302:
+            vyos303:
+            vyos304:
+          vars:
+            host: three
